@@ -12,17 +12,17 @@ class DeleteTaskViewController: UIViewController {
     
     @IBOutlet weak var taskLabel: UILabel!
     
-    var task = Task()
-    var previousVC = ViewController()
+    var task : Task? = nil
+
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if task.important {
-            taskLabel.text = "\(task.name)‼️"
+        if task!.important {
+            taskLabel.text = "\(task!.name!)‼️"
         }else{
-            taskLabel.text = task.name
+            taskLabel.text = task!.name!
         }
 
 
@@ -30,8 +30,9 @@ class DeleteTaskViewController: UIViewController {
     }
 
     @IBAction func completeButton(_ sender: Any) {
-        previousVC.tasks.remove(at: previousVC.selectedIndex)
-        previousVC.tableView.reloadData()
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context.delete(task!)
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
         navigationController?.popViewController(animated: true)
     }
     
